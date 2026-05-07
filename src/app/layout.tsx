@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Sidebar } from "@/components/layout/sidebar"
 import { BottomNav } from "@/components/layout/bottom-nav"
 import { Topbar } from "@/components/layout/topbar"
+import { PWARegistration } from "@/components/pwa-registration"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -39,6 +40,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <PWARegistration />
           <div className="flex h-screen overflow-hidden bg-background">
             <Sidebar />
             <div className="flex flex-1 flex-col overflow-hidden">
