@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { CheckCircle2, Calculator, CheckSquare, Sparkles, Loader2, AlertTriangle, Eye, EyeOff, Copy, Check, Clipboard, ImagePlus, X, BookOpen, ChevronDown, ChevronUp, Info } from "lucide-react"
+import { CheckCircle2, Calculator, CheckSquare, Sparkles, Loader2, AlertTriangle, Eye, EyeOff, Copy, Check, ImagePlus, X, BookOpen, Info } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 
 const TIMEFRAMES = [
@@ -271,7 +271,8 @@ Example WRONG replies: "Rp 1.540", "The price is 1540", "1,540.00"`
       }
 
       setAiResult(data.result)
-    } catch (err: any) {
+    } catch (error) {
+      const err = error as Error;
       setAiError(err.message)
     } finally {
       setIsAnalyzing(false)
@@ -410,7 +411,7 @@ Example WRONG replies: "Rp 1.540", "The price is 1540", "1,540.00"`
                   >
                     <div className="flex items-center gap-2.5">
                       <BookOpen className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                      <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">Panduan Indikator Chart</span>
+                      <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">Panduan Indikator Chart</span>
                       <span className="hidden sm:inline text-xs text-emerald-500/80 font-normal">— Pastikan chart Anda tampil dengan indikator berikut sebelum analisis</span>
                     </div>
                     <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-500">
@@ -425,7 +426,7 @@ Example WRONG replies: "Rp 1.540", "The price is 1540", "1,540.00"`
                   {/* Konten Panduan */}
                   {showGuide && (
                     <div className="px-4 pb-5 pt-1 border-t border-emerald-500/20 animate-in slide-in-from-top-2 fade-in duration-300">
-                      <p className="text-xs text-blue-600/80 dark:text-blue-400/80 mb-4 leading-relaxed">
+                      <p className="text-xs text-emerald-600/80 dark:text-emerald-400/80 mb-4 leading-relaxed">
                         Agar AI dapat menganalisis chart dengan akurat menggunakan metode <strong>Hybrid Swing</strong>,
                         pastikan tampilan chart Anda memuat <strong>semua indikator berikut</strong> sebelum screenshot/upload.
                       </p>
@@ -492,9 +493,9 @@ Example WRONG replies: "Rp 1.540", "The price is 1540", "1,540.00"`
                       {/* Tips tambahan */}
                       <div className="mt-4 flex items-start gap-2.5 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
                         <Info className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                        <div className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed space-y-1">
+                        <div className="text-xs text-emerald-700 dark:text-emerald-300 leading-relaxed space-y-1">
                           <p><strong>Tips Screenshot Chart:</strong></p>
-                          <ul className="list-disc list-inside space-y-0.5 text-blue-600/90 dark:text-blue-400/90">
+                          <ul className="list-disc list-inside space-y-0.5 text-emerald-600/90 dark:text-emerald-400/90">
                             <li>Gunakan TradingView / Chart View pada Aplikasi Trading yang digunakan — aktifkan semua indikator di atas sebelum screenshot.</li>
                             <li>Pastikan candle terakhir (kanan) dan <strong>skala harga (kanan)</strong> terlihat jelas.</li>
                             <li>Tampilkan minimal <strong>50–100 candle</strong> agar AI bisa membaca konteks tren.</li>
@@ -565,6 +566,7 @@ Example WRONG replies: "Rp 1.540", "The price is 1540", "1,540.00"`
 
                 {image && (
                   <div className="mt-4 rounded-xl overflow-hidden border border-border relative group bg-muted/30">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={image} alt="Uploaded Chart" className="w-full object-contain max-h-[400px]" />
                     {/* Tombol hapus gambar */}
                     <button

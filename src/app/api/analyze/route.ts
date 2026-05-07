@@ -35,8 +35,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ result: response.text });
 
-  } catch (error: any) {
-    console.error("Gemini API Error:", error);
-    return NextResponse.json({ error: error.message || "Failed to analyze image" }, { status: 500 });
+  } catch (error) {
+    const err = error as Error;
+    console.error("Gemini API Error:", err);
+    return NextResponse.json({ error: err.message || "Failed to analyze image" }, { status: 500 });
   }
 }
