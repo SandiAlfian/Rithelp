@@ -20,7 +20,10 @@ const jetbrains = JetBrains_Mono({
 import { QueryProvider } from "@/components/providers/query-provider"
 
 export const metadata: Metadata = {
-  title: "Rithelp - Asisten Analisis Saham Personal Anda",
+  title: {
+    default: "Rithelp - Asisten Analisis Saham Personal Anda",
+    template: "%s | Rithelp"
+  },
   description: "Aplikasi analisis saham IHSG profesional dengan kalkulator saham, berita, dan chart.",
   manifest: "/manifest.json",
 }

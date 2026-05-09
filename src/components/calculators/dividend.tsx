@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useHaptic } from "@/hooks/use-haptic"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -9,6 +10,7 @@ import { motion } from "framer-motion"
 import { Landmark, Wallet, Percent } from "lucide-react"
 
 export function DividendCalculator() {
+  const haptic = useHaptic()
   const [dpsInput, setDpsInput] = useState<string>("")
   const [avgPrice, setAvgPrice] = useState<string>("")
   const [lot, setLot] = useState<string>("")
@@ -73,6 +75,7 @@ export function DividendCalculator() {
                   inputMode="numeric"
                   placeholder="Misal: 150"
                   value={lastEdited === 'dps' ? dpsInput : (computedDps > 0 ? Math.round(computedDps).toLocaleString("id-ID") : "")}
+                  onFocus={() => haptic("light")}
                   onChange={(e) => {
                     const val = e.target.value.replace(/\D/g, "");
                     setDpsInput(val ? parseInt(val, 10).toLocaleString("id-ID") : "");
@@ -112,7 +115,10 @@ export function DividendCalculator() {
                 <Switch
                   id="tax-mode"
                   checked={tax}
-                  onCheckedChange={setTax}
+                  onCheckedChange={(val) => {
+                    setTax(val)
+                    haptic("medium")
+                  }}
                   className="data-[state=checked]:bg-primary"
                 />
               </div>
@@ -138,6 +144,7 @@ export function DividendCalculator() {
                   placeholder="0"
                   className="bg-transparent border-none outline-none text-4xl font-black text-foreground tracking-tighter text-glow w-full p-0"
                   value={lastEdited === 'net' ? netDivInput : (computedNet > 0 ? Math.round(computedNet).toLocaleString("id-ID") : "0")}
+                  onFocus={() => haptic("light")}
                   onChange={(e) => {
                     const val = e.target.value.replace(/\D/g, "");
                     setNetDivInput(val ? parseInt(val, 10).toLocaleString("id-ID") : "");

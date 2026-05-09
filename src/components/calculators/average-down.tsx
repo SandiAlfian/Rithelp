@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useHaptic } from "@/hooks/use-haptic"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -8,6 +9,7 @@ import { motion } from "framer-motion"
 import { TrendingDown, Coins, Wallet, Briefcase } from "lucide-react"
 
 export function AverageDownCalculator() {
+  const haptic = useHaptic()
   const [initialPrice, setInitialPrice] = useState<string>("")
   const [initialLot, setInitialLot] = useState<string>("")
   const [newPrice, setNewPrice] = useState<string>("")
@@ -55,6 +57,7 @@ export function AverageDownCalculator() {
                   inputMode="numeric"
                   placeholder="Misal: 1.000"
                   value={initialPrice ? parseInt(initialPrice, 10).toLocaleString("id-ID") : ""}
+                  onFocus={() => haptic("light")}
                   onChange={(e) => setInitialPrice(e.target.value.replace(/\D/g, ""))}
                 />
               </div>

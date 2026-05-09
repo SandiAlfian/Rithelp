@@ -1,6 +1,12 @@
 import { getMarketNews } from "@/services/news"
 import { BeritaClient } from "@/components/berita/berita-client"
 import { scrapeCorporateActions } from "@/services/scraper"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Berita & Aksi Korporasi",
+  description: "Pantau jadwal aksi korporasi emiten dan rangkuman berita pasar modal terkini secara real-time.",
+}
 
 export const revalidate = 3600 // revalidate every hour
 

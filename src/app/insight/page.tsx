@@ -1,7 +1,8 @@
 import { InsightClient } from "@/components/insight/insight-client"
+import type { Metadata } from "next"
 
-export const metadata = {
-  title: "Insight Saham - Edukasi Investasi Rithelp",
+export const metadata: Metadata = {
+  title: "Insight Saham",
   description: "Pusat edukasi saham terlengkap: Ebook gratis, Video edukasi, dan Podcast Saham populer.",
 }
 

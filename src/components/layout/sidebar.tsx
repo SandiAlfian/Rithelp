@@ -5,9 +5,11 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { navItems } from "@/config/nav"
 import { motion } from "framer-motion"
+import { useHaptic } from "@/hooks/use-haptic"
 
 export function Sidebar() {
   const pathname = usePathname()
+  const haptic = useHaptic()
 
   return (
     <aside className="hidden w-72 flex-col bg-card md:flex relative z-50 border-r border-foreground/5 shadow-2xl transition-colors duration-300">
@@ -28,6 +30,7 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => haptic("light")}
               className="relative block outline-none group"
             >
               <div
