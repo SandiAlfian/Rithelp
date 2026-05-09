@@ -10,7 +10,7 @@ export function BottomNav() {
   const haptic = useHaptic()
 
   return (
-    <nav className="fixed bottom-4 left-4 right-4 z-50 flex h-20 items-center justify-around rounded-3xl glass-premium md:hidden px-4 shadow-2xl border border-foreground/5">
+    <nav className="fixed bottom-4 left-2 right-2 z-50 flex h-16 items-center justify-between rounded-2xl glass-premium md:hidden px-1 shadow-2xl border border-foreground/5 overflow-hidden">
       {navItems.map((item) => {
         const isActive = pathname === item.href
         return (
@@ -19,17 +19,17 @@ export function BottomNav() {
             href={item.href}
             onClick={() => haptic("light")}
             className={cn(
-              "relative flex flex-col items-center justify-center gap-1 transition-all duration-300 flex-1 outline-none",
+              "relative flex flex-col items-center justify-center gap-0.5 transition-all duration-300 flex-1 min-w-0 outline-none flex-shrink-0",
               isActive ? "text-primary" : "text-muted-foreground"
             )}
           >
             <item.icon className={cn(
-              "h-5 w-5 transition-all duration-300", 
+              "h-5 w-5 transition-all duration-300 flex-shrink-0", 
               isActive ? "scale-110" : "opacity-70 group-hover:opacity-100"
             )} />
             
             <span className={cn(
-              "text-[9px] font-black tracking-tight transition-all duration-300 uppercase",
+              "text-[8px] font-black tracking-tight transition-all duration-300 uppercase truncate w-full text-center px-1",
               isActive ? "opacity-100" : "opacity-60"
             )}>
               {item.shortTitle || item.title}

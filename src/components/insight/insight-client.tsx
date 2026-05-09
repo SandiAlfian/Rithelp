@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
+import { useHaptic } from "@/hooks/use-haptic"
 import { 
   Library, PlayCircle, Mic, ExternalLink, Play, 
   Shield, BookOpen, AlertTriangle, RefreshCw, 
@@ -32,6 +33,7 @@ function CustomBookCover({ title, author }: { title: string, author: string }) {
 
 export function InsightClient() {
   const [activeTab, setActiveTab] = useState<TabType>("ebook")
+  const haptic = useHaptic()
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null)
   const [isMounted, setIsMounted] = useState(false)
 
@@ -55,6 +57,7 @@ export function InsightClient() {
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab)
     setCurrentPage(1)
+    haptic("medium")
   }
 
   const isLoading = 
@@ -96,7 +99,7 @@ export function InsightClient() {
         <button
           onClick={() => handleTabChange("ebook")}
           className={cn(
-            "relative flex-1 min-w-[120px] md:min-w-[140px] flex items-center justify-center gap-3 py-4 md:py-3 px-4 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
+            "relative flex-1 min-w-[100px] md:min-w-[140px] flex items-center justify-center gap-2 md:gap-3 py-3 md:py-3 px-3 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
             activeTab === "ebook" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
           )}
         >
@@ -108,13 +111,13 @@ export function InsightClient() {
             />
           )}
           <Library className={cn("w-4 h-4 shrink-0 transition-transform duration-500", activeTab === "ebook" ? "scale-110" : "")} />
-          <span>Ebook Saham</span>
+          <span className="truncate">Ebook</span>
         </button>
 
         <button
           onClick={() => handleTabChange("video")}
           className={cn(
-            "relative flex-1 min-w-[120px] md:min-w-[140px] flex items-center justify-center gap-3 py-4 md:py-3 px-4 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
+            "relative flex-1 min-w-[100px] md:min-w-[140px] flex items-center justify-center gap-2 md:gap-3 py-3 md:py-3 px-3 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
             activeTab === "video" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
           )}
         >
@@ -126,13 +129,13 @@ export function InsightClient() {
             />
           )}
           <PlayCircle className={cn("w-4 h-4 shrink-0 transition-transform duration-500", activeTab === "video" ? "scale-110" : "")} />
-          <span>Video Edukasi</span>
+          <span className="truncate">Edukasi</span>
         </button>
 
         <button
           onClick={() => handleTabChange("podcast")}
           className={cn(
-            "relative flex-1 min-w-[120px] md:min-w-[140px] flex items-center justify-center gap-3 py-4 md:py-3 px-4 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
+            "relative flex-1 min-w-[100px] md:min-w-[140px] flex items-center justify-center gap-2 md:gap-3 py-3 md:py-3 px-3 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
             activeTab === "podcast" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
           )}
         >
@@ -144,7 +147,7 @@ export function InsightClient() {
             />
           )}
           <Mic className={cn("w-4 h-4 shrink-0 transition-transform duration-500", activeTab === "podcast" ? "scale-110" : "")} />
-          <span>Podcast Populer</span>
+          <span className="truncate">Podcast</span>
         </button>
       </div>
 
@@ -159,19 +162,19 @@ export function InsightClient() {
           className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
           {isLoading ? (
-            <div className="col-span-full py-40 flex flex-col items-center text-center space-y-8">
+            <div className="col-span-full py-24 md:py-40 flex flex-col items-center justify-center text-center space-y-8">
               <div className="relative">
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-2xl animate-pulse scale-150" />
-                <div className="relative flex items-center justify-center w-20 h-20 bg-card/50 backdrop-blur-xl rounded-full border border-primary/20 shadow-2xl">
-                  <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                <div className="relative flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-card/50 backdrop-blur-xl rounded-full border border-primary/20 shadow-2xl">
+                  <Loader2 className="w-7 h-7 md:w-8 md:h-8 text-primary animate-spin" />
                 </div>
               </div>
               <div className="space-y-3">
-                <h3 className="text-2xl font-semibold tracking-tight text-foreground/90">
+                <h3 className="text-xl md:text-2xl font-semibold tracking-tight text-foreground/90">
                   <span className="shimmer-text">Memuat data</span>
                   <span className="loading-dots text-primary/60" />
                 </h3>
-                <p className="text-xs font-medium text-muted-foreground/60 max-w-xs mx-auto leading-relaxed">
+                <p className="text-[11px] md:text-xs font-medium text-muted-foreground/60 max-w-[240px] md:max-w-xs mx-auto leading-relaxed">
                   Kami sedang menyiapkan konten edukasi terbaik untuk strategi trading Anda.
                 </p>
               </div>

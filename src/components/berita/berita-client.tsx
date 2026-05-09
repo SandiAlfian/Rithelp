@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Newspaper, Building2, Search, ArrowUpRight, AlertCircle } from "lucide-react"
+import { Newspaper, Building2, Search, ArrowUpRight, AlertCircle, Loader2 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
+import { useHaptic } from "@/hooks/use-haptic"
 
 interface NewsItem {
   title: string
@@ -25,13 +26,23 @@ export function BeritaClient({
   corpActionNews: NewsItem[];
 }) {
   const [activeTab, setActiveTab] = useState<"corp" | "news">("corp")
+  const haptic = useHaptic()
   const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
+  const [isLoading, setIsLoading] = useState(true)
   const itemsPerPage = 12
 
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800)
+    return () => clearTimeout(timer)
+  }, [])
+
   const handleTabChange = (tab: "corp" | "news") => {
+    setIsLoading(true)
     setActiveTab(tab)
     setCurrentPage(1)
+    haptic("medium")
+    setTimeout(() => setIsLoading(false), 600)
   }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,13 +79,13 @@ export function BeritaClient({
               transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
             />
           )}
-          <Building2 className={cn("w-4 h-4 transition-transform duration-500", activeTab === "corp" ? "scale-110" : "")} />
-          <span>Aksi Korporasi</span>
+          <Building2 className={cn("w-4 h-4 shrink-0 transition-transform duration-500", activeTab === "corp" ? "scale-110" : "")} />
+          <span className="truncate">Aksi Korporasi</span>
         </button>
         <button
           onClick={() => handleTabChange("news")}
           className={cn(
-            "relative flex-1 min-w-[140px] flex items-center justify-center gap-3 py-4 md:py-3 px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
+            "relative flex-1 min-w-[120px] md:min-w-[140px] flex items-center justify-center gap-2 md:gap-3 py-3 md:py-3 px-3 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
             activeTab === "news" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
           )}
         >
@@ -85,8 +96,8 @@ export function BeritaClient({
               transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
             />
           )}
-          <Newspaper className={cn("w-4 h-4 transition-transform duration-500", activeTab === "news" ? "scale-110" : "")} />
-          <span>Berita Terkini</span>
+          <Newspaper className={cn("w-4 h-4 shrink-0 transition-transform duration-500", activeTab === "news" ? "scale-110" : "")} />
+          <span className="truncate">Berita Terkini</span>
         </button>
       </div>
 
@@ -123,13 +134,38 @@ export function BeritaClient({
         )}
         
         <AnimatePresence mode="wait">
-          <motion.div 
-            key={activeTab + searchQuery}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
-          >
+          {isLoading ? (
+            <motion.div 
+              key="loading"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="col-span-full py-24 md:py-40 flex flex-col items-center justify-center text-center space-y-8"
+            >
+              <div className="relative">
+                <div className="absolute inset-0 bg-primary/20 rounded-full blur-2xl animate-pulse scale-150" />
+                <div className="relative flex items-center justify-center w-16 h-16 md:w-20 md:w-20 bg-card/50 backdrop-blur-xl rounded-full border border-primary/20 shadow-2xl">
+                  <Loader2 className="w-7 h-7 md:w-8 md:h-8 text-primary animate-spin" />
+                </div>
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-xl md:text-2xl font-semibold tracking-tight text-foreground/90">
+                  <span className="shimmer-text">Memuat data</span>
+                  <span className="loading-dots text-primary/60" />
+                </h3>
+                <p className="text-[11px] md:text-xs font-medium text-muted-foreground/60 max-w-[240px] md:max-w-xs mx-auto leading-relaxed">
+                  Kami sedang menyiapkan informasi pasar modal terbaru untuk Anda.
+                </p>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div 
+              key={activeTab + searchQuery}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+            >
             {paginatedItems.length === 0 ? (
               <div className="col-span-full py-20 text-center bg-card/30 rounded-3xl border-dashed border-foreground/10">
                 <p className="text-muted-foreground font-black uppercase tracking-widest text-xs">No Results Found</p>
@@ -189,6 +225,7 @@ export function BeritaClient({
               ))
             )}
           </motion.div>
+          )}
         </AnimatePresence>
 
         {/* Pagination Controls */}
