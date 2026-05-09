@@ -1,6 +1,7 @@
 import { getMarketNews } from "@/services/news"
 import { BeritaClient } from "@/components/berita/berita-client"
 import { scrapeCorporateActions } from "@/services/scraper"
+import { Sparkles } from "lucide-react"
 
 export const revalidate = 3600 // revalidate every hour
 
@@ -9,11 +10,13 @@ export default async function BeritaPage() {
   const corpActionResult = await scrapeCorporateActions()
 
   return (
-    <div className="container mx-auto p-4 md:p-8 space-y-8 max-w-5xl">
-      <div className="flex flex-col items-center text-center space-y-3">
-        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">Portal Pasar Modal</h1>
-        <p className="text-muted-foreground text-sm md:text-base max-w-xl">
-          Pantau jadwal aksi korporasi dan baca rangkuman berita terkini.
+    <div className="container mx-auto p-6 md:p-12 space-y-12 max-w-6xl">
+      <div className="flex flex-col items-center text-center space-y-4">
+        <h1 className="text-4xl md:text-5xl font-black tracking-tighter">
+          Portal <span className="text-primary text-glow">Pasar Modal</span>
+        </h1>
+        <p className="text-muted-foreground text-base max-w-xl font-bold tracking-tight opacity-80">
+          Pantau jadwal aksi korporasi dan analisis berita terkini secara real-time.
         </p>
       </div>
 

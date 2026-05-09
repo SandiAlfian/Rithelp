@@ -3,7 +3,10 @@
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Newspaper, Building2, Search } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Newspaper, Building2, Search, ArrowUpRight, AlertCircle } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { cn } from "@/lib/utils"
 
 interface NewsItem {
   title: string
@@ -23,15 +26,17 @@ export function BeritaClient({
 }) {
   const [activeTab, setActiveTab] = useState<"corp" | "news">("corp")
   const [searchQuery, setSearchQuery] = useState("")
-  const [isAnimating, setIsAnimating] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 12
 
-  const handleTabClick = (tab: "corp" | "news") => {
-    if (tab === activeTab) return
-    setIsAnimating(true)
-    setTimeout(() => {
-      setActiveTab(tab)
-      setIsAnimating(false)
-    }, 150)
+  const handleTabChange = (tab: "corp" | "news") => {
+    setActiveTab(tab)
+    setCurrentPage(1)
+  }
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value)
+    setCurrentPage(1)
   }
 
   const currentList = activeTab === "corp" ? corpActionNews : news
@@ -42,113 +47,182 @@ export function BeritaClient({
     item.source.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage)
+  const paginatedItems = filteredItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+
   return (
-    <div className="flex flex-col space-y-8 w-full">
-      {/* Modern Interactive Menu - Sejajar (Horizontal) */}
-      <div className="relative flex flex-row gap-2 p-1 md:p-2 bg-muted/30 rounded-xl md:rounded-full border shadow-inner overflow-x-auto no-scrollbar w-full">
+    <div className="flex flex-col space-y-10 w-full">
+      {/* Modern Interactive Menu */}
+      <div className="relative flex flex-wrap justify-center gap-2 p-2 bg-card/30 backdrop-blur-xl rounded-3xl border border-foreground/5 shadow-2xl w-full max-w-2xl mx-auto">
         <button
-          onClick={() => handleTabClick("corp")}
-          className={`relative flex-1 min-w-[200px] flex items-center justify-center gap-2 py-3 px-2 md:px-6 rounded-lg md:rounded-full text-xs md:text-sm font-semibold transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary whitespace-nowrap ${
-            activeTab === "corp"
-              ? "text-primary shadow-md bg-background scale-100 z-10 border border-primary/20"
-              : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-          }`}
+          onClick={() => handleTabChange("corp")}
+          className={cn(
+            "relative flex-1 min-w-[140px] flex items-center justify-center gap-3 py-4 md:py-3 px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
+            activeTab === "corp" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+          )}
         >
-          <Building2 className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 ${activeTab === "corp" ? "scale-110" : ""}`} />
-          <span>Berita Aksi Korporasi</span>
+          {activeTab === "corp" && (
+            <motion.div
+              layoutId="news-active-tab"
+              className="absolute inset-0 bg-primary rounded-2xl -z-10 shadow-lg shadow-primary/20"
+              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+            />
+          )}
+          <Building2 className={cn("w-4 h-4 transition-transform duration-500", activeTab === "corp" ? "scale-110" : "")} />
+          <span>Aksi Korporasi</span>
         </button>
         <button
-          onClick={() => handleTabClick("news")}
-          className={`relative flex-1 min-w-[150px] flex items-center justify-center gap-2 py-3 px-2 md:px-6 rounded-lg md:rounded-full text-xs md:text-sm font-semibold transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary whitespace-nowrap ${
-            activeTab === "news"
-              ? "text-primary shadow-md bg-background scale-100 z-10 border border-primary/20"
-              : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-          }`}
+          onClick={() => handleTabChange("news")}
+          className={cn(
+            "relative flex-1 min-w-[140px] flex items-center justify-center gap-3 py-4 md:py-3 px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
+            activeTab === "news" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+          )}
         >
-          <Newspaper className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 ${activeTab === "news" ? "scale-110" : ""}`} />
+          {activeTab === "news" && (
+            <motion.div
+              layoutId="news-active-tab"
+              className="absolute inset-0 bg-primary rounded-2xl -z-10 shadow-lg shadow-primary/20"
+              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+            />
+          )}
+          <Newspaper className={cn("w-4 h-4 transition-transform duration-500", activeTab === "news" ? "scale-110" : "")} />
           <span>Berita Terkini</span>
         </button>
       </div>
 
-      {/* Content Area with Crossfade */}
-      <div className="relative min-h-[400px]">
-        <div
-          className={`w-full transition-all duration-300 ease-in-out ${
-            isAnimating ? "opacity-0 scale-95 blur-sm" : "opacity-100 scale-100 blur-0"
-          }`}
-        >
-          <div className="space-y-6">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <h2 className="text-2xl font-semibold">
-                {activeTab === "corp" ? "Berita & Informasi Emiten" : "Berita Pasar Modal Terkini"}
-              </h2>
-              <div className="relative w-full md:w-72">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input 
-                  placeholder="Cari berita atau emiten..." 
-                  className="pl-9 w-full bg-background"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-            </div>
-
-            {activeTab === "corp" && (
-              <div className="bg-amber-50 dark:bg-amber-950/30 p-3 rounded-lg border border-amber-200 dark:border-amber-800/50">
-                <p className="text-xs text-amber-800 dark:text-amber-300">
-                  <strong>Peringatan:</strong> Berita di bawah ini memuat indikasi rencana aksi korporasi yang akan datang (seperti Dividen atau RUPS). Jadwal resmi mungkin berbeda dengan spekulasi rilis. Harap selalu tinjau sumber resmi emiten untuk kepastian.
-                </p>
-              </div>
-            )}
-            
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {filteredItems.length === 0 ? (
-                <p className="text-muted-foreground col-span-full py-8 text-center border rounded-xl border-dashed">
-                  {activeTab === "corp" 
-                    ? `Tidak ada berita rencana aksi korporasi terbaru yang cocok dengan "${searchQuery}".` 
-                    : `Tidak ada berita yang cocok dengan pencarian "${searchQuery}".`
-                  }
-                </p>
-              ) : (
-                filteredItems.map((item, i) => (
-                  <a href={item.link} target="_blank" rel="noreferrer" key={i} className="block group outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-xl">
-                    <Card className="h-full overflow-hidden hover:bg-muted/30 transition-all duration-300 hover:shadow-lg hover:border-primary/30 flex flex-col">
-                      {item.imageUrl && (
-                        <div className="w-full h-48 bg-muted overflow-hidden relative border-b">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img 
-                            src={item.imageUrl} 
-                            alt={item.title} 
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                        </div>
-                      )}
-                      <CardContent className="p-5 flex flex-col flex-1">
-                        <div className="flex justify-between items-start mb-3 gap-2">
-                          <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-md">{item.source}</span>
-                          <span className="text-xs text-muted-foreground whitespace-nowrap">
-                            {new Date(item.pubDate).toLocaleDateString("id-ID", {
-                              day: "numeric",
-                              month: "short",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </span>
-                        </div>
-                        <h3 className="font-semibold text-base md:text-lg group-hover:text-primary transition-colors mb-2 line-clamp-3">
-                          {item.title}
-                        </h3>
-                        <p className="text-sm text-muted-foreground line-clamp-3 mt-auto">
-                          {item.contentSnippet}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  </a>
-                ))
-              )}
-            </div>
+      {/* Search & Warning */}
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          <h2 className="text-2xl font-black tracking-tight text-foreground/90 uppercase italic">
+            {activeTab === "corp" ? "Corporate Action" : "Berita Pasar"}
+          </h2>
+          <div className="relative w-full md:w-80 group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+            <Input 
+              placeholder="Cari berita atau emiten..." 
+              className="pl-11 h-11 bg-card/40 border-foreground/5 rounded-2xl focus:bg-card/60 transition-all duration-300"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
           </div>
         </div>
+
+        {activeTab === "corp" && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-primary/5 p-4 rounded-2xl border border-primary/20 backdrop-blur-md flex items-start gap-4"
+          >
+            <div className="p-2 rounded-xl bg-primary/10 text-primary shrink-0">
+               <AlertCircle className="w-5 h-5" />
+            </div>
+            <p className="text-xs text-foreground/80 leading-relaxed font-bold tracking-tight opacity-90">
+              <strong>Disclaimer:</strong> Berita ini memuat indikasi rencana aksi korporasi (Dividen, RUPS, dll). Jadwal resmi mungkin berbeda. Selalu verifikasi melalui keterbukaan informasi di situs resmi BEI atau emiten terkait.
+            </p>
+          </motion.div>
+        )}
+        
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={activeTab + searchQuery}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+          >
+            {paginatedItems.length === 0 ? (
+              <div className="col-span-full py-20 text-center bg-card/30 rounded-3xl border-dashed border-foreground/10">
+                <p className="text-muted-foreground font-black uppercase tracking-widest text-xs">No Results Found</p>
+              </div>
+            ) : (
+              paginatedItems.map((item, i) => (
+                <motion.a 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  href={item.link} 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  key={i} 
+                  className="block group outline-none"
+                >
+                  <Card className="h-full bg-card/30 hover:bg-card/50 border-foreground/5 hover:border-primary/30 flex flex-col relative overflow-hidden group-hover:-translate-y-2 transition-all duration-500">
+                    <div className="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                       <div className="p-2 rounded-xl bg-card/80 backdrop-blur-md border border-foreground/10 text-foreground">
+                          <ArrowUpRight className="w-4 h-4" />
+                       </div>
+                    </div>
+
+                    {item.imageUrl && (
+                      <div className="w-full h-48 bg-muted/50 overflow-hidden relative border-b border-foreground/5">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img 
+                          src={item.imageUrl} 
+                          alt={item.title} 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent opacity-60" />
+                      </div>
+                    )}
+                    <CardContent className="p-8 flex flex-col flex-1">
+                      <div className="flex justify-between items-center mb-5 gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-[0.15em] text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/10">
+                          {item.source}
+                        </span>
+                        <span className="text-[10px] font-black text-muted-foreground uppercase tracking-tight opacity-70">
+                          {new Date(item.pubDate).toLocaleDateString("id-ID", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric"
+                          })}
+                        </span>
+                      </div>
+                      <h3 className="font-black text-lg group-hover:text-primary transition-colors mb-4 line-clamp-3 leading-tight tracking-tight">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground line-clamp-3 font-bold tracking-tight opacity-80 leading-relaxed">
+                        {item.contentSnippet}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.a>
+              ))
+            )}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-4 pt-8">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setCurrentPage(prev => Math.max(1, prev - 1))
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+              }}
+              disabled={currentPage === 1}
+              className="rounded-xl border-foreground/5 bg-card/30 backdrop-blur-md px-6 h-10"
+            >
+              Previous
+            </Button>
+            <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground bg-card/30 px-4 py-2.5 rounded-xl border border-foreground/5 backdrop-blur-md">
+              Page {currentPage} of {totalPages}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setCurrentPage(prev => Math.min(totalPages, prev + 1))
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+              }}
+              disabled={currentPage === totalPages}
+              className="rounded-xl border-foreground/5 bg-card/30 backdrop-blur-md px-6 h-10"
+            >
+              Next
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   )

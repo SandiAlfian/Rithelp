@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { CheckCircle2, Calculator, CheckSquare, Sparkles, Loader2, AlertTriangle, Eye, EyeOff, Copy, Check, ImagePlus, X, BookOpen, Info } from "lucide-react"
 import ReactMarkdown from "react-markdown"
+import { cn } from "@/lib/utils"
+import { motion } from "framer-motion"
 
 const TIMEFRAMES = [
   "1m", "3m", "5m", "10m", "15m", "30m", "1H", "2H", "4H", "Daily", "Weekly", "Monthly"
@@ -335,42 +337,60 @@ Example WRONG replies: "Rp 1.540", "The price is 1540", "1,540.00"`
 
   return (
     <div className="flex flex-col space-y-8 w-full">
-      {/* Modern Interactive Menu - Sejajar (Horizontal) */}
-      <div className="relative flex flex-row gap-2 p-1 md:p-2 bg-muted/30 rounded-xl md:rounded-full border shadow-inner overflow-x-auto no-scrollbar w-full">
+      {/* Modern Interactive Menu - Standardized Style */}
+      <div className="relative flex flex-wrap justify-center gap-2 p-2 bg-card/30 backdrop-blur-xl rounded-3xl border border-foreground/5 shadow-2xl w-full max-w-4xl mx-auto">
         <button
           onClick={() => handleTabClick("ai")}
-          className={`relative flex-1 min-w-[160px] flex items-center justify-center gap-2 py-3 px-2 md:px-6 rounded-lg md:rounded-full text-xs md:text-sm font-semibold transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary whitespace-nowrap ${
-            activeTab === "ai"
-              ? "text-primary shadow-md bg-background scale-100 z-10 border border-primary/20"
-              : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-          }`}
+          className={cn(
+            "relative flex-1 min-w-[120px] md:min-w-[140px] flex items-center justify-center gap-3 py-4 md:py-3 px-4 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
+            activeTab === "ai" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+          )}
         >
-          <Sparkles className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 ${activeTab === "ai" ? "scale-110" : ""}`} />
-          <span>AI Chart Analyst</span>
+          {activeTab === "ai" && (
+            <motion.div
+              layoutId="chart-active-tab"
+              className="absolute inset-0 bg-primary rounded-2xl -z-10 shadow-lg shadow-primary/20"
+              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+            />
+          )}
+          <Sparkles className={cn("w-4 h-4 shrink-0 transition-transform duration-500", activeTab === "ai" ? "scale-110" : "")} />
+          <span>AI Analyst</span>
         </button>
 
         <button
           onClick={() => handleTabClick("calculator")}
-          className={`relative flex-1 min-w-[160px] flex items-center justify-center gap-2 py-3 px-2 md:px-6 rounded-lg md:rounded-full text-xs md:text-sm font-semibold transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary whitespace-nowrap ${
-            activeTab === "calculator"
-              ? "text-primary shadow-md bg-background scale-100 z-10 border border-primary/20"
-              : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-          }`}
+          className={cn(
+            "relative flex-1 min-w-[120px] md:min-w-[140px] flex items-center justify-center gap-3 py-4 md:py-3 px-4 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
+            activeTab === "calculator" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+          )}
         >
-          <Calculator className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 ${activeTab === "calculator" ? "scale-110" : ""}`} />
-          <span>Kalkulator Eksekusi</span>
+          {activeTab === "calculator" && (
+            <motion.div
+              layoutId="chart-active-tab"
+              className="absolute inset-0 bg-primary rounded-2xl -z-10 shadow-lg shadow-primary/20"
+              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+            />
+          )}
+          <Calculator className={cn("w-4 h-4 shrink-0 transition-transform duration-500", activeTab === "calculator" ? "scale-110" : "")} />
+          <span>Kalkulator</span>
         </button>
 
         <button
           onClick={() => handleTabClick("checklist")}
-          className={`relative flex-1 min-w-[160px] flex items-center justify-center gap-2 py-3 px-2 md:px-6 rounded-lg md:rounded-full text-xs md:text-sm font-semibold transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary whitespace-nowrap ${
-            activeTab === "checklist"
-              ? "text-primary shadow-md bg-background scale-100 z-10 border border-primary/20"
-              : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-          }`}
+          className={cn(
+            "relative flex-1 min-w-[120px] md:min-w-[140px] flex items-center justify-center gap-3 py-4 md:py-3 px-4 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
+            activeTab === "checklist" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+          )}
         >
-          <CheckSquare className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 ${activeTab === "checklist" ? "scale-110" : ""}`} />
-          <span>Jurnal & Checklist</span>
+          {activeTab === "checklist" && (
+            <motion.div
+              layoutId="chart-active-tab"
+              className="absolute inset-0 bg-primary rounded-2xl -z-10 shadow-lg shadow-primary/20"
+              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+            />
+          )}
+          <CheckSquare className={cn("w-4 h-4 shrink-0 transition-transform duration-500", activeTab === "checklist" ? "scale-110" : "")} />
+          <span>Checklist</span>
         </button>
       </div>
 

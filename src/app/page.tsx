@@ -1,76 +1,47 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Calculator, Newspaper, LineChart, ArrowRight } from "lucide-react"
+import { Calculator, Newspaper, LineChart, ArrowRight, Sparkles, TrendingUp, Zap, Shield, BookOpen } from "lucide-react"
+import { motion } from "framer-motion"
+import { cn } from "@/lib/utils"
 
 function AnimatedRithelp() {
-  const text = "RITHELP"
-  const [prevIndex, setPrevIndex] = useState(-1)
-  const [hoverStates, setHoverStates] = useState(Array(text.length).fill(0))
-
-  useEffect(() => {
-    // Efek gelombang animasi naik saat halaman pertama dimuat
-    text.split("").forEach((_, i) => {
-      setTimeout(() => {
-        setHoverStates(prev => {
-          const newStates = [...prev]
-          newStates[i] = -1 // Bergerak naik
-          return newStates
-        })
-        
-        // Kembali ke posisi awal
-        setTimeout(() => {
-          setHoverStates(prev => {
-            const newStates = [...prev]
-            newStates[i] = 0 // Posisi normal
-            return newStates
-          })
-        }, 300)
-      }, i * 100) // Jeda 100ms antar huruf
-    })
-  }, [])
-
-  const handleMouseEnter = (index: number) => {
-    let direction = -1 // default UP (-y)
-    if (prevIndex !== -1) {
-      if (index > prevIndex) direction = -1 // left to right -> UP
-      else if (index < prevIndex) direction = 1 // right to left -> DOWN
-    }
-    setPrevIndex(index)
-    
-    const newStates = [...hoverStates]
-    newStates[index] = direction
-    setHoverStates(newStates)
-  }
-
-  const handleMouseLeave = (index: number) => {
-    const newStates = [...hoverStates]
-    newStates[index] = 0
-    setHoverStates(newStates)
-  }
-
+  const letters = ["R", "I", "T", "H", "E", "L", "P"]
+  
   return (
-    <div 
-      className="flex justify-center space-x-1 sm:space-x-2 text-5xl sm:text-7xl md:text-8xl font-black tracking-widest text-primary mb-4 cursor-crosshair"
-      onMouseLeave={() => setPrevIndex(-1)}
-    >
-      {text.split("").map((letter, i) => (
-        <span
+    <div className="flex justify-center space-x-1 sm:space-x-3 text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter text-foreground mb-4 cursor-default select-none">
+      {letters.map((letter, i) => (
+        <motion.span
           key={i}
-          onMouseEnter={() => handleMouseEnter(i)}
-          onMouseLeave={() => handleMouseLeave(i)}
-          className={`transition-all duration-300 ease-out inline-block hover:text-emerald-500 drop-shadow-sm hover:drop-shadow-lg ${
-            hoverStates[i] === -1 
-              ? "-translate-y-4 sm:-translate-y-6 md:-translate-y-8" 
-              : hoverStates[i] === 1 
-              ? "translate-y-4 sm:translate-y-6 md:translate-y-8" 
-              : "translate-y-0"
-          }`}
+          initial={{ 
+            opacity: 0, 
+            y: 20,
+            color: i >= 3 ? "inherit" : "#6CBD8F"
+          }}
+          animate={{ 
+            opacity: 1, 
+            y: 0,
+            color: i >= 3 ? "#6CBD8F" : "inherit"
+          }}
+          transition={{ 
+            duration: 0.8, 
+            delay: i * 0.1,
+            ease: [0.22, 1, 0.36, 1],
+            color: { duration: 1.2, delay: 0.5 + (i * 0.1) }
+          }}
+          whileHover={{ 
+            y: -20, 
+            color: i >= 3 ? "inherit" : "#6CBD8F",
+            transition: { duration: 0.2 }
+          }}
+          className={cn(
+            "inline-block transition-colors duration-500 drop-shadow-[0_0_20px_rgba(108,189,143,0.1)]",
+            i >= 3 ? "text-primary" : "text-foreground"
+          )}
         >
           {letter}
-        </span>
+        </motion.span>
       ))}
     </div>
   )
@@ -78,86 +49,119 @@ function AnimatedRithelp() {
 
 const features = [
   {
+    title: "Analisis Chart",
+    description: "Gunakan AI untuk mendeteksi pola harga dan mendapatkan panduan teknikal yang lebih cerdas.",
+    href: "/chart",
+    icon: LineChart,
+    color: "text-primary",
+    bg: "bg-primary/10"
+  },
+  {
     title: "Kalkulator Saham",
-    description: "Hitung Average Down/Up, Harga Teoretis Right Issue, dan Dividen Yield secara instan.",
+    description: "Hitung rata-rata harga (Average Down/Up), simulasi Right Issue, dan estimasi Dividen dengan akurasi tinggi.",
     href: "/kalkulator",
     icon: Calculator,
-    color: "text-emerald-500",
-    bg: "bg-emerald-500/10",
+    color: "text-primary",
+    bg: "bg-primary/10"
+  },
+  {
+    title: "Insight Saham",
+    description: "Perdalam ilmu pasar modal dengan kurasi Ebook, video edukasi, dan podcast populer.",
+    href: "/insight",
+    icon: BookOpen,
+    color: "text-primary",
+    bg: "bg-primary/10"
   },
   {
     title: "Berita Informasi",
-    description: "Pantau jadwal emiten dan baca rangkuman berita ekonomi terkini dari sumber terpercaya.",
+    description: "Pantau jadwal aksi korporasi emiten dan rangkuman berita pasar modal terkini secara real-time.",
     href: "/berita",
     icon: Newspaper,
-    color: "text-emerald-500",
-    bg: "bg-emerald-500/10",
-  },
-  {
-    title: "Analisis Chart",
-    description: "Analisa teknikal interaktif dengan indikator VMA, Auto Support/Resistance, atau analisis gambar.",
-    href: "/chart",
-    icon: LineChart,
-    color: "text-emerald-500",
-    bg: "bg-emerald-500/10",
+    color: "text-primary",
+    bg: "bg-primary/10"
   },
 ]
 
 export default function Dashboard() {
   return (
-    <div className="container mx-auto p-4 md:p-8 space-y-8 max-w-5xl">
-      <div className="flex flex-col items-center text-center space-y-4 py-8 md:py-12">
-        <AnimatedRithelp />
-        
-        <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80">
-          Versi 1.0.0
-        </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-          Pusat Analisis <span className="text-primary">IHSG</span> Anda
-        </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl">
-          Pilih alat analisis yang Anda butuhkan untuk mempermudah pengambilan keputusan investasi saham yang lebih cerdas dan terukur.
-        </p>
+    <div className="min-h-screen bg-transparent">
+      {/* Background Glow Decorations - Mint & Sage Theme */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-primary/5 blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-secondary/5 blur-[100px]" />
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {features.map((feature, i) => (
-          <Link key={i} href={feature.href} className="group outline-none">
-            <Card className="h-full transition-all duration-500 border-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/10 hover:border-emerald-500/60 group-focus-visible:ring-2 group-focus-visible:ring-emerald-500 overflow-hidden relative bg-card">
-              
-              {/* Highlight Catur (Chessboard Pattern) pada saat Hover */}
-              <div 
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-0" 
-                style={{
-                  backgroundImage: "linear-gradient(45deg, rgba(16, 185, 129, 0.05) 25%, transparent 25%, transparent 75%, rgba(16, 185, 129, 0.05) 75%, rgba(16, 185, 129, 0.05)), linear-gradient(45deg, rgba(16, 185, 129, 0.05) 25%, transparent 25%, transparent 75%, rgba(16, 185, 129, 0.05) 75%, rgba(16, 185, 129, 0.05))",
-                  backgroundPosition: "0 0, 60px 60px",
-                  backgroundSize: "120px 120px",
-                  WebkitMaskImage: "radial-gradient(circle at top right, black 5%, transparent 70%)",
-                  maskImage: "radial-gradient(circle at top right, black 5%, transparent 70%)"
-                }} 
-              />
-              
-              {/* Aksent Lingkaran Bawaan */}
-              <div className={`absolute top-0 right-0 p-32 -mr-16 -mt-16 rounded-full transition-transform duration-500 ease-out group-hover:scale-150 opacity-10 ${feature.bg} z-0`} />
-              
-              <CardHeader className="relative z-10">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition-colors duration-500 group-hover:bg-emerald-500/10 group-hover:text-emerald-500 ${feature.bg} ${feature.color}`}>
-                  <feature.icon className="w-6 h-6" />
-                </div>
-                <CardTitle className="text-xl group-hover:text-emerald-500 transition-colors duration-300">
-                  {feature.title}
-                </CardTitle>
-                <CardDescription className="text-sm mt-2 leading-relaxed transition-colors duration-300 group-hover:text-foreground/80">
-                  {feature.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="relative z-10 pt-4 flex items-center text-sm font-semibold text-muted-foreground group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300">
-                <span>Buka Modul</span>
-                <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-2" />
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
+      <div className="container mx-auto p-6 md:p-12 space-y-12 max-w-7xl">
+        {/* Hero Section */}
+        <div className="flex flex-col items-center text-center space-y-10 pt-4 pb-12 md:pt-12 md:pb-20">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-5 py-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary shadow-lg shadow-primary/5 backdrop-blur-md"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            Rithelp V.1.0
+          </motion.div>
+          
+          <div className="space-y-6">
+            <AnimatedRithelp />
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              className="text-3xl md:text-5xl font-black tracking-tight leading-tight"
+            >
+              Asisten Analisis <span className="text-primary text-glow italic">Saham Personal</span> Anda
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8, duration: 1 }}
+              className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-bold tracking-tight opacity-80"
+            >
+              Kalkulator finansial presisi, berita emiten terkini, dan analisis chart berbasis AI dalam satu platform modern yang dirancang untuk investor cerdas.
+            </motion.p>
+          </div>
+
+          {/* Labels removed as requested */}
+        </div>
+
+        {/* Features Grid */}
+        <div className="grid gap-8 md:grid-cols-2 max-w-5xl mx-auto pb-24">
+          {features.map((feature, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2 + (i * 0.2), duration: 0.8 }}
+            >
+              <Link href={feature.href} className="group block h-full">
+                <Card className="h-full bg-card/30 hover:bg-card/50 border-foreground/5 hover:border-primary/40 relative overflow-hidden group-hover:-translate-y-2 transition-all duration-500">
+                  <div className="absolute -right-20 -top-20 w-40 h-40 bg-primary/5 rounded-full blur-[60px] group-hover:bg-primary/10 transition-all duration-700" />
+                  
+                  <CardHeader>
+                    <div className="flex items-center justify-between mb-6">
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-700 group-hover:scale-110 group-hover:rotate-3 bg-primary/10 text-primary shadow-inner`}>
+                        <feature.icon className="w-7 h-7" />
+                      </div>
+                    </div>
+                    <CardTitle className="text-2xl group-hover:text-primary transition-colors duration-500">
+                      {feature.title}
+                    </CardTitle>
+                    <CardDescription className="text-base mt-4 leading-relaxed font-bold tracking-tight opacity-80">
+                      {feature.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-4 flex items-center text-[10px] font-black text-primary uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-[-10px] group-hover:translate-x-0">
+                    <span>Mulai Sekarang</span>
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </CardContent>
+                </Card>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   )

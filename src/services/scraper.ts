@@ -1,6 +1,7 @@
 import Parser from "rss-parser"
 import type { NewsItem } from "./news"
 import { calculateSimilarity } from "./news"
+import * as cheerio from "cheerio"
 
 const bulanMap: Record<string, number> = {
   'januari': 0, 'jan': 0,
@@ -56,17 +57,17 @@ export async function scrapeCorporateActions(): Promise<{ data: NewsItem[], erro
       },
     })
     
-    // Tarik berita dari CNBC dan Antara untuk cakupan yang luas
+    // Menggunakan sumber berita yang lebih fokus pada pasar modal dan aksi korporasi
     const feeds = [
-      { url: "https://www.cnbcindonesia.com/market/rss", source: "CNBC Indonesia", priority: 1 },
-      { url: "https://www.cnnindonesia.com/ekonomi/rss", source: "CNN Indonesia", priority: 2 },
-      { url: "https://www.antaranews.com/rss/ekonomi-bisnis", source: "Antara News", priority: 3 },
+      { url: "https://investasi.kontan.co.id/rss", source: "Kontan Investasi", priority: 1 },
+      { url: "https://www.cnbcindonesia.com/market/rss", source: "CNBC Market", priority: 2 },
+      { url: "https://www.cnnindonesia.com/ekonomi/rss", source: "CNN Ekonomi", priority: 3 },
     ]
     
     const actions: NewsItem[] = []
     
-    // Kata kunci untuk aksi korporasi yang "akan datang"
-    const caRegex = /dividen|rups|rapat umum|stock split|right issue|hmetd|jadwal|cum date|bakal bagi|tebar|segera/i
+    // Kata kunci ekstensif untuk aksi korporasi (Dividen, RUPS, HMETD, Waran, Akuisisi, Tender Offer, dsb)
+    const caRegex = /dividen|rups|rapat umum|stock split|right(?:s)? issue|hmetd|waran|warrant|tender offer|akuisisi|merger|takeover|mencaplok|jadwal|cum date|bakal bagi|tebar|segera/i
     
     const now = new Date()
     const currentTimestamp = now.getTime()
@@ -156,7 +157,35 @@ export async function scrapeCorporateActions(): Promise<{ data: NewsItem[], erro
 
     if (sortedActions.length > 0) {
       // Ambil 15 berita terbaru
-      return { data: sortedActions.slice(0, 15), error: null }
+      const finalActions = sortedActions.slice(0, 15)
+      
+      // Scrape og:image secara paralel jika gambar belum ada dari RSS (misalnya dari Kontan)
+      const actionsWithImages = await Promise.all(finalActions.map(async (action) => {
+        if (!action.imageUrl && action.link) {
+          try {
+            const res = await fetch(action.link, {
+              headers: { 
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' 
+              },
+              // Gunakan signal timeout untuk mencegah page lambat dirender
+              signal: AbortSignal.timeout(3000) 
+            })
+            if (res.ok) {
+              const html = await res.text()
+              const $ = cheerio.load(html)
+              const ogImage = $('meta[property="og:image"]').attr('content')
+              if (ogImage) {
+                action.imageUrl = ogImage
+              }
+            }
+          } catch (e) {
+            console.warn("Gagal mengambil og:image untuk", action.link)
+          }
+        }
+        return action
+      }))
+
+      return { data: actionsWithImages, error: null }
     } else {
       return { data: [], error: "Tidak ada berita aksi korporasi terbaru hari ini." }
     }
