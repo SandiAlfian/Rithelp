@@ -178,7 +178,7 @@ export async function scrapeCorporateActions(): Promise<{ data: NewsItem[], erro
                 action.imageUrl = ogImage
               }
             }
-          } catch (e) {
+          } catch {
             console.warn("Gagal mengambil og:image untuk", action.link)
           }
         }

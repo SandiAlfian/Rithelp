@@ -1,7 +1,6 @@
 import { getMarketNews } from "@/services/news"
 import { BeritaClient } from "@/components/berita/berita-client"
 import { scrapeCorporateActions } from "@/services/scraper"
-import { Sparkles } from "lucide-react"
 
 export const revalidate = 3600 // revalidate every hour
 

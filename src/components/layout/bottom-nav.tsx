@@ -4,8 +4,6 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { navItems } from "@/config/nav"
-import { motion } from "framer-motion"
-
 export function BottomNav() {
   const pathname = usePathname()
 

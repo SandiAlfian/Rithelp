@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { Video } from '@/types/insight';
 
 const CACHE_DIR = path.join(process.cwd(), '.cache');
 
@@ -9,7 +10,7 @@ export const youtubeCache = {
     return `yt_${mode}_${today}.json`;
   },
 
-  async get(mode: string): Promise<any | null> {
+  async get(mode: string): Promise<Video[] | null> {
     try {
       const fileName = this.getCacheKey(mode);
       const filePath = path.join(CACHE_DIR, fileName);
@@ -24,7 +25,7 @@ export const youtubeCache = {
     return null;
   },
 
-  async set(mode: string, data: any): Promise<void> {
+  async set(mode: string, data: Video[]): Promise<void> {
     try {
       if (!fs.existsSync(CACHE_DIR)) {
         fs.mkdirSync(CACHE_DIR, { recursive: true });

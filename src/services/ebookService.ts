@@ -14,6 +14,7 @@ export const ebookService = {
         }
       })
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (response.data.items || []).map((item: any) => {
         const info = item.volumeInfo
         return {
@@ -41,6 +42,7 @@ export const ebookService = {
         params: { q: query, limit: 15 }
       })
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return response.data.docs.map((book: any) => ({
         id: book.key,
         title: book.title,
@@ -53,7 +55,7 @@ export const ebookService = {
         score: book.ratings_average * 20 || 60,
         category: "Archive"
       }))
-    } catch (error) {
+    } catch {
       return []
     }
   },

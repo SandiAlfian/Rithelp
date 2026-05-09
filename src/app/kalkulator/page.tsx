@@ -4,7 +4,7 @@ import { useState } from "react"
 import { AverageDownCalculator } from "@/components/calculators/average-down"
 import { RightIssueCalculator } from "@/components/calculators/right-issue"
 import { DividendCalculator } from "@/components/calculators/dividend"
-import { ArrowDownToLine, Briefcase, Landmark, Sparkles } from "lucide-react"
+import { ArrowDownToLine, Briefcase, Landmark } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
 

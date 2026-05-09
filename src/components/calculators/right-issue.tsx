@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
-import { Info, Calculator, TrendingDown, Briefcase, CheckCircle2, XCircle, AlertTriangle, ArrowRightLeft, Landmark, DollarSign, Megaphone, Wallet } from "lucide-react"
+import { TrendingDown, Briefcase, CheckCircle2, XCircle, AlertTriangle, ArrowRightLeft, DollarSign, Megaphone, Wallet } from "lucide-react"
 
 export function RightIssueCalculator() {
   const [ratioOld, setRatioOld] = useState<string>("")

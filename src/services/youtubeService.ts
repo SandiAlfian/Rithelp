@@ -38,7 +38,8 @@ const formatDisplayDuration = (seconds: number): string => {
   return `${m}m`;
 };
 
-const calculateAdvancedScore = (video: any, isPodcastMode: boolean): number => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const calculateAdvancedScore = (video: any): number => {
   let score = 0;
   const title = (video.snippet?.title || "").toLowerCase();
   const channel = (video.snippet?.channelTitle || "").toLowerCase();
@@ -103,18 +104,6 @@ export const youtubeService = {
       if (videoIds.length === 0) return this.fallbackRSS(isPodcastMode);
 
       // Ambil statistics hanya untuk TOP 3 (Hemat Quota: 1 per request)
-      const topIds = videoIds.slice(0, 3).join(",");
-      const otherIds = videoIds.slice(3, 15).join(",");
-
-      // Fetch Statistics for TOP 3
-      const statsResponse = await axios.get(`${BASE_URL}/videos`, {
-        params: {
-          part: "snippet,statistics,contentDetails",
-          id: topIds,
-          key: YOUTUBE_API_KEY
-        }
-      });
-
       // Fetch Snippet only for the rest (to save quota/complexity, actually videos.list is same cost)
       // We will fetch all details in one batch of 15 to be efficient
       const allDetailsResponse = await axios.get(`${BASE_URL}/videos`, {
@@ -126,6 +115,7 @@ export const youtubeService = {
       });
 
       const detailedItems = allDetailsResponse.data.items || [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const normalized: Video[] = detailedItems.map((item: any) => {
         const durationSeconds = parseDurationToSeconds(item.contentDetails?.duration || "PT0M");
         return {
@@ -139,15 +129,15 @@ export const youtubeService = {
           durationSeconds: durationSeconds,
           views: parseInt(item.statistics?.viewCount || "0"),
           likes: parseInt(item.statistics?.likeCount || "0"),
-          score: calculateAdvancedScore(item, isPodcastMode),
+          score: calculateAdvancedScore(item),
           trustedChannel: TRUSTED_CHANNELS.some(c => item.snippet.channelTitle.toLowerCase().includes(c.toLowerCase())),
           videoUrl: `https://www.youtube.com/watch?v=${item.id}`,
           embedUrl: `https://www.youtube.com/embed/${item.id}`,
         };
       });
 
-      let deduped = deduplicateContent(normalized);
-      let filtered = deduped.filter(v => {
+      const deduped = deduplicateContent(normalized);
+      const filtered = deduped.filter(v => {
         const text = `${v.title} ${v.description}`.toLowerCase();
         if (BLACKLIST_KEYWORDS.some(word => text.includes(word.toLowerCase()))) return false;
         if ((v.durationSeconds || 0) < 120) return false;
@@ -165,8 +155,9 @@ export const youtubeService = {
       await youtubeCache.set(mode, result);
       return result;
 
-    } catch (error: any) {
-      const isQuotaError = error.response?.status === 403;
+    } catch (error: unknown) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const isQuotaError = error instanceof Error && (error as any).response?.status === 403;
       if (isQuotaError) {
         console.warn("⚠️ Quota Exceeded. Switching to RSS Fallback.");
         return this.fallbackRSS(isPodcastMode);

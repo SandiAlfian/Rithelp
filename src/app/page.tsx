@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Calculator, Newspaper, LineChart, ArrowRight, Sparkles, TrendingUp, Zap, Shield, BookOpen } from "lucide-react"
+import { Calculator, Newspaper, LineChart, ArrowRight, Sparkles, BookOpen } from "lucide-react"
 import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 

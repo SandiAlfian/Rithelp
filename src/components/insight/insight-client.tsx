@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { 
   Library, PlayCircle, Mic, ExternalLink, Play, 
   Shield, BookOpen, AlertTriangle, RefreshCw, 
-  Clock, CheckCircle2, Info, Video, X, Loader2
+  Video, X, Loader2
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -16,6 +16,29 @@ import { useVideos } from "@/hooks/insight/useVideos"
 import { usePodcasts } from "@/hooks/insight/usePodcasts"
 
 type TabType = "ebook" | "video" | "podcast"
+
+interface EbookItem {
+  id: string | number;
+  title: string;
+  author: string;
+  cover?: string;
+  category: string;
+  year?: string;
+  source: string;
+  description: string;
+  link: string;
+}
+
+interface VideoItem {
+  id: string | number;
+  title: string;
+  channel: string;
+  thumbnail: string;
+  duration?: string;
+  embedUrl?: string;
+  trustedChannel?: boolean;
+  isFallbackRSS?: boolean;
+}
 
 function CustomBookCover({ title, author }: { title: string, author: string }) {
   return (
@@ -31,7 +54,7 @@ function CustomBookCover({ title, author }: { title: string, author: string }) {
 
 export function InsightClient() {
   const [activeTab, setActiveTab] = useState<TabType>("ebook")
-  const [selectedVideo, setSelectedVideo] = useState<any | null>(null)
+  const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null)
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
@@ -47,7 +70,7 @@ export function InsightClient() {
   const { data: videoData, isLoading: isLoadingVideos, refetch: refetchVideos, isError: isErrorVideos } = useVideos()
   const { data: podcastData, isLoading: isLoadingPodcasts, refetch: refetchPodcasts, isError: isErrorPodcasts } = usePodcasts()
 
-  const openInYoutube = (v: any) => {
+  const openInYoutube = (v: VideoItem) => {
     setSelectedVideo(v)
   }
 
@@ -79,7 +102,6 @@ export function InsightClient() {
     return Math.ceil(data.length / itemsPerPage)
   })()
 
-  const isFallbackRSS = (activeTab === "video" && videoData?.isFallbackRSS) || (activeTab === "podcast" && podcastData?.isFallbackRSS)
 
   return (
     <div className="flex flex-col space-y-8 w-full pb-20 pt-8">
@@ -197,14 +219,16 @@ export function InsightClient() {
             </div>
           ) : (
             <>
-              {activeTab === "ebook" && currentItems.map((eb: any) => (
+              {activeTab === "ebook" && currentItems.map((eb: EbookItem) => (
                 <Card key={eb.id} className="bg-card/40 backdrop-blur-md border-foreground/5 hover:border-primary/40 group transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col h-full">
                   <div className="aspect-[3/4] relative overflow-hidden bg-muted">
+                    {/* eslint-disable @next/next/no-img-element */}
                     {eb.cover ? (
                       <img src={eb.cover} alt={eb.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     ) : (
                       <CustomBookCover title={eb.title} author={eb.author} />
                     )}
+                    {/* eslint-enable @next/next/no-img-element */}
                   </div>
                   <CardHeader>
                     <div className="flex items-center justify-between mb-4">
@@ -238,9 +262,10 @@ export function InsightClient() {
                 </Card>
               ))}
 
-              {(activeTab === "video" || activeTab === "podcast") && currentItems.map((v: any) => (
+              {(activeTab === "video" || activeTab === "podcast") && currentItems.map((v: VideoItem) => (
                 <Card key={v.id} className="bg-card/40 backdrop-blur-md border-foreground/5 hover:border-primary/40 group transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col h-full">
                   <div className="aspect-video relative overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={v.thumbnail} alt={v.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     <div 
                       className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
