@@ -9,6 +9,7 @@ import { CheckCircle2, Calculator, CheckSquare, Sparkles, Loader2, AlertTriangle
 import ReactMarkdown from "react-markdown"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
+import { useHaptic } from "@/hooks/use-haptic"
 
 const TIMEFRAMES = [
   "1m", "3m", "5m", "10m", "15m", "30m", "1H", "2H", "4H", "Daily", "Weekly", "Monthly"
@@ -17,6 +18,7 @@ const TIMEFRAMES = [
 export function TradingSystemDashboard() {
   const [activeTab, setActiveTab] = useState<"ai" | "calculator" | "checklist">("ai")
   const [isAnimating, setIsAnimating] = useState(false)
+  const haptic = useHaptic()
 
   const [image, setImage] = useState<string | null>(null)
   const [timeframe, setTimeframe] = useState<string>("5m")
@@ -151,6 +153,7 @@ JAWAB HANYA JSON ARRAY, tidak ada teks lain.`
   const handleTabClick = (tab: "ai" | "calculator" | "checklist") => {
     if (tab === activeTab) return
     setIsAnimating(true)
+    haptic("medium")
     setTimeout(() => {
       setActiveTab(tab)
       setIsAnimating(false)
@@ -342,7 +345,7 @@ Example WRONG replies: "Rp 1.540", "The price is 1540", "1,540.00"`
         <button
           onClick={() => handleTabClick("ai")}
           className={cn(
-            "relative flex-1 min-w-[120px] md:min-w-[140px] flex items-center justify-center gap-3 py-4 md:py-3 px-4 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
+            "relative flex-1 min-w-[100px] md:min-w-[140px] flex items-center justify-center gap-2 md:gap-3 py-3 md:py-3 px-3 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
             activeTab === "ai" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
           )}
         >
@@ -354,13 +357,13 @@ Example WRONG replies: "Rp 1.540", "The price is 1540", "1,540.00"`
             />
           )}
           <Sparkles className={cn("w-4 h-4 shrink-0 transition-transform duration-500", activeTab === "ai" ? "scale-110" : "")} />
-          <span>AI Analyst</span>
+          <span className="truncate">AI Analyst</span>
         </button>
 
         <button
           onClick={() => handleTabClick("calculator")}
           className={cn(
-            "relative flex-1 min-w-[120px] md:min-w-[140px] flex items-center justify-center gap-3 py-4 md:py-3 px-4 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
+            "relative flex-1 min-w-[100px] md:min-w-[140px] flex items-center justify-center gap-2 md:gap-3 py-3 md:py-3 px-3 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
             activeTab === "calculator" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
           )}
         >
@@ -372,13 +375,13 @@ Example WRONG replies: "Rp 1.540", "The price is 1540", "1,540.00"`
             />
           )}
           <Calculator className={cn("w-4 h-4 shrink-0 transition-transform duration-500", activeTab === "calculator" ? "scale-110" : "")} />
-          <span>Kalkulator</span>
+          <span className="truncate">Kalkulator</span>
         </button>
 
         <button
           onClick={() => handleTabClick("checklist")}
           className={cn(
-            "relative flex-1 min-w-[120px] md:min-w-[140px] flex items-center justify-center gap-3 py-4 md:py-3 px-4 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
+            "relative flex-1 min-w-[100px] md:min-w-[140px] flex items-center justify-center gap-2 md:gap-3 py-3 md:py-3 px-3 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
             activeTab === "checklist" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
           )}
         >
@@ -390,7 +393,7 @@ Example WRONG replies: "Rp 1.540", "The price is 1540", "1,540.00"`
             />
           )}
           <CheckSquare className={cn("w-4 h-4 shrink-0 transition-transform duration-500", activeTab === "checklist" ? "scale-110" : "")} />
-          <span>Checklist</span>
+          <span className="truncate">Checklist</span>
         </button>
       </div>
 
