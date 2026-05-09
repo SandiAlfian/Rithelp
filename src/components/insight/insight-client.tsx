@@ -7,38 +7,16 @@ import { cn } from "@/lib/utils"
 import { 
   Library, PlayCircle, Mic, ExternalLink, Play, 
   Shield, BookOpen, AlertTriangle, RefreshCw, 
-  Video, X, Loader2
+  Video as VideoIcon, X, Loader2
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useEbooks } from "@/hooks/insight/useEbooks"
 import { useVideos } from "@/hooks/insight/useVideos"
 import { usePodcasts } from "@/hooks/insight/usePodcasts"
+import type { Ebook, Video } from "@/types/insight"
 
 type TabType = "ebook" | "video" | "podcast"
-
-interface EbookItem {
-  id: string | number;
-  title: string;
-  author: string;
-  cover?: string;
-  category: string;
-  year?: string;
-  source: string;
-  description: string;
-  link: string;
-}
-
-interface VideoItem {
-  id: string | number;
-  title: string;
-  channel: string;
-  thumbnail: string;
-  duration?: string;
-  embedUrl?: string;
-  trustedChannel?: boolean;
-  isFallbackRSS?: boolean;
-}
 
 function CustomBookCover({ title, author }: { title: string, author: string }) {
   return (
@@ -54,7 +32,7 @@ function CustomBookCover({ title, author }: { title: string, author: string }) {
 
 export function InsightClient() {
   const [activeTab, setActiveTab] = useState<TabType>("ebook")
-  const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null)
+  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null)
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
@@ -70,7 +48,7 @@ export function InsightClient() {
   const { data: videoData, isLoading: isLoadingVideos, refetch: refetchVideos, isError: isErrorVideos } = useVideos()
   const { data: podcastData, isLoading: isLoadingPodcasts, refetch: refetchPodcasts, isError: isErrorPodcasts } = usePodcasts()
 
-  const openInYoutube = (v: VideoItem) => {
+  const openInYoutube = (v: Video) => {
     setSelectedVideo(v)
   }
 
@@ -89,11 +67,17 @@ export function InsightClient() {
     (activeTab === "video" && isErrorVideos) || 
     (activeTab === "podcast" && isErrorPodcasts)
 
-  const currentItems = (() => {
-    const data = activeTab === "ebook" ? ebooks : activeTab === "video" ? videoData?.videos : podcastData?.videos
-    if (!data) return []
+  const ebookItems: Ebook[] = (() => {
+    if (!ebooks) return []
     const start = (currentPage - 1) * itemsPerPage
-    return data.slice(start, start + itemsPerPage)
+    return ebooks.slice(start, start + itemsPerPage)
+  })()
+
+  const videoItems: Video[] = (() => {
+    const vids = activeTab === "video" ? videoData?.videos : podcastData?.videos
+    if (!vids) return []
+    const start = (currentPage - 1) * itemsPerPage
+    return vids.slice(start, start + itemsPerPage)
   })()
 
   const totalPages = (() => {
@@ -219,7 +203,7 @@ export function InsightClient() {
             </div>
           ) : (
             <>
-              {activeTab === "ebook" && currentItems.map((eb: EbookItem) => (
+              {activeTab === "ebook" && ebookItems.map((eb: Ebook) => (
                 <Card key={eb.id} className="bg-card/40 backdrop-blur-md border-foreground/5 hover:border-primary/40 group transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col h-full">
                   <div className="aspect-[3/4] relative overflow-hidden bg-muted">
                     {/* eslint-disable @next/next/no-img-element */}
@@ -262,7 +246,7 @@ export function InsightClient() {
                 </Card>
               ))}
 
-              {(activeTab === "video" || activeTab === "podcast") && currentItems.map((v: VideoItem) => (
+              {(activeTab === "video" || activeTab === "podcast") && videoItems.map((v: Video) => (
                 <Card key={v.id} className="bg-card/40 backdrop-blur-md border-foreground/5 hover:border-primary/40 group transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col h-full">
                   <div className="aspect-video relative overflow-hidden">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -289,7 +273,7 @@ export function InsightClient() {
                   </div>
                   <CardHeader className="flex-1">
                     <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-2 opacity-80 flex items-center gap-1">
-                      {activeTab === "video" ? <Video className="w-3 h-3" /> : <Mic className="w-3 h-3" />}
+                      {activeTab === "video" ? <VideoIcon className="w-3 h-3" /> : <Mic className="w-3 h-3" />}
                       {v.channel}
                     </p>
                     <CardTitle className="text-sm leading-snug group-hover:text-primary transition-colors duration-300 line-clamp-2">
@@ -363,7 +347,7 @@ export function InsightClient() {
                 <div className="flex items-center justify-between p-4 border-b border-foreground/5 bg-muted/30">
                   <div className="flex items-center gap-3">
                     <div className="p-2 rounded-full bg-primary/10 text-primary">
-                      {activeTab === "video" ? <Video className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                      {activeTab === "video" ? <VideoIcon className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                     </div>
                     <div>
                       <h3 className="font-bold text-sm line-clamp-1">{selectedVideo.title}</h3>

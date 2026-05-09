@@ -162,7 +162,7 @@ export const youtubeService = {
         console.warn("⚠️ Quota Exceeded. Switching to RSS Fallback.");
         return this.fallbackRSS(isPodcastMode);
       }
-      console.error("YouTube API Error:", error.message);
+      console.error("YouTube API Error:", error instanceof Error ? error.message : "Unknown error");
       return this.fallbackRSS(isPodcastMode);
     }
   },
