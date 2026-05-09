@@ -142,7 +142,7 @@ export function DividendCalculator() {
                   type="text"
                   inputMode="numeric"
                   placeholder="0"
-                  className="bg-transparent border-none outline-none text-4xl font-black text-foreground tracking-tighter text-glow w-full p-0"
+                  className="bg-transparent border-none outline-none text-2xl md:text-4xl font-black text-foreground tracking-tighter text-glow w-full p-0 break-all"
                   value={lastEdited === 'net' ? netDivInput : (computedNet > 0 ? Math.round(computedNet).toLocaleString("id-ID") : "0")}
                   onFocus={() => haptic("light")}
                   onChange={(e) => {
@@ -163,7 +163,7 @@ export function DividendCalculator() {
                   inputMode="decimal"
                   placeholder="0"
                   style={{ width: `${(lastEdited === 'yield' ? yieldInput : (computedYield > 0 ? computedYield.toLocaleString("id-ID", { maximumFractionDigits: 2 }) : "0")).length * 0.6 || 1}ch` }}
-                  className="bg-transparent border-none outline-none text-4xl font-black text-foreground tracking-tighter p-0 min-w-[1ch]"
+                  className="bg-transparent border-none outline-none text-2xl md:text-4xl font-black text-foreground tracking-tighter p-0 min-w-[1ch] break-all"
                   value={lastEdited === 'yield' ? yieldInput : (computedYield > 0 ? computedYield.toLocaleString("id-ID", { maximumFractionDigits: 2 }) : "0")}
                   onChange={(e) => {
                     const val = e.target.value.replace(/[^\d.,]/g, "").replace(",", ".");
@@ -171,18 +171,18 @@ export function DividendCalculator() {
                     setLastEdited('yield');
                   }}
                 />
-                <span className="text-4xl font-black text-foreground tracking-tighter">%</span>
+                <span className="text-2xl md:text-4xl font-black text-foreground tracking-tighter">%</span>
               </div>
             </div>
             
             <div className="col-span-full grid grid-cols-2 gap-4 pt-6 border-t border-foreground/5">
                <div>
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Dividen Kotor</p>
-                  <p className="text-lg font-black text-foreground/80">Rp {grossDividend.toLocaleString("id-ID")}</p>
+                  <p className="text-sm md:text-lg font-black text-foreground/80 break-all">Rp {grossDividend.toLocaleString("id-ID")}</p>
                </div>
                <div>
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Potongan Pajak</p>
-                  <p className="text-lg font-black text-destructive/80 opacity-80">Rp {taxAmount.toLocaleString("id-ID")}</p>
+                  <p className="text-sm md:text-lg font-black text-destructive/80 opacity-80 break-all">Rp {taxAmount.toLocaleString("id-ID")}</p>
                </div>
             </div>
           </div>

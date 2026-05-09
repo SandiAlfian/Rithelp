@@ -171,14 +171,14 @@ export function RightIssueCalculator() {
                     <DollarSign className="w-3 h-3 text-primary" />
                     <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Harga Teoretis Ex-Date</p>
                   </div>
-                  <p className="text-5xl font-black text-foreground tracking-tighter">Rp {theoreticalPrice.toLocaleString("id-ID", { maximumFractionDigits: 0 })}</p>
+                  <p className="text-3xl md:text-5xl font-black text-foreground tracking-tighter break-all">Rp {theoreticalPrice.toLocaleString("id-ID", { maximumFractionDigits: 0 })}</p>
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
                     <TrendingDown className={cn("w-3 h-3", theoreticalChangePercent >= 0 ? "text-primary" : "text-destructive")} />
                     <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Dilusi / Apresiasi</p>
                   </div>
-                  <p className={cn("text-5xl font-black tracking-tighter", theoreticalChangePercent >= 0 ? "text-primary" : "text-destructive")}>
+                  <p className={cn("text-3xl md:text-5xl font-black tracking-tighter break-all", theoreticalChangePercent >= 0 ? "text-primary" : "text-destructive")}>
                     {theoreticalChangePercent >= 0 ? "+" : ""}{theoreticalChangePercent.toFixed(2)}%
                   </p>
                 </div>
@@ -187,7 +187,7 @@ export function RightIssueCalculator() {
                     <CheckCircle2 className="w-3 h-3 text-primary" />
                     <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Hak (HMETD) Didapat</p>
                   </div>
-                  <p className="text-4xl font-black text-primary tracking-tighter">{hmetdLot.toLocaleString("id-ID")} Lot</p>
+                  <p className="text-2xl md:text-4xl font-black text-primary tracking-tighter break-all">{hmetdLot.toLocaleString("id-ID")} Lot</p>
                   <p className="text-[10px] font-black text-muted-foreground/60 uppercase mt-1 tracking-widest">{hmetdShares.toLocaleString("id-ID")} Lembar Baru</p>
                 </div>
               </div>
@@ -212,7 +212,7 @@ export function RightIssueCalculator() {
             <CardContent className="p-8 space-y-8 flex-1">
               <div className="text-center py-4 bg-primary/5 rounded-xl border border-primary/10">
                 <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-2">Average Harga Baru</p>
-                <p className="text-4xl font-black text-primary tracking-tighter">Rp {newAvgPriceExercise.toLocaleString("id-ID", { maximumFractionDigits: 0 })}</p>
+                <p className="text-2xl md:text-4xl font-black text-primary tracking-tighter break-all">Rp {newAvgPriceExercise.toLocaleString("id-ID", { maximumFractionDigits: 0 })}</p>
                 <div className={cn("inline-flex items-center gap-1.5 px-3 py-1 mt-3 rounded-full text-[10px] font-black uppercase tracking-tighter", avgChangePercent >= 0 ? "bg-primary/20 text-primary" : "bg-destructive/10 text-destructive")}>
                   {avgChangePercent >= 0 ? "+" : ""}{avgChangePercent.toFixed(2)}% dari Avg Lama
                 </div>
@@ -237,7 +237,7 @@ export function RightIssueCalculator() {
                <div className="p-5 rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
                   <span className="text-[10px] font-black uppercase tracking-[0.2em] block opacity-80 mb-2">Estimasi P/L Akhir</span>
                   <div className="space-y-1">
-                    <p className="text-2xl font-black leading-none">Rp {plExercise.toLocaleString("id-ID", { maximumFractionDigits: 0 })}</p>
+                    <p className="text-xl md:text-2xl font-black leading-none break-all">Rp {plExercise.toLocaleString("id-ID", { maximumFractionDigits: 0 })}</p>
                     <p className="text-xs font-bold opacity-90">{plExercisePercent.toFixed(2)}%</p>
                   </div>
                </div>
@@ -257,7 +257,7 @@ export function RightIssueCalculator() {
             <CardContent className="p-8 space-y-8 flex-1">
               <div className="text-center py-4 bg-secondary/5 rounded-xl border border-secondary/10">
                 <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-2">Total Dana Penjualan</p>
-                <p className="text-4xl font-black text-secondary tracking-tighter">Rp {hmetdSaleProceeds.toLocaleString("id-ID", { maximumFractionDigits: 0 })}</p>
+                <p className="text-2xl md:text-4xl font-black text-secondary tracking-tighter break-all">Rp {hmetdSaleProceeds.toLocaleString("id-ID", { maximumFractionDigits: 0 })}</p>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 mt-3 rounded-full bg-secondary/20 text-secondary text-[10px] font-black uppercase tracking-tighter">
                    @Rp {hmetdSellPrice.toLocaleString("id-ID", { maximumFractionDigits: 0 })} / Hak
                 </div>
@@ -266,7 +266,7 @@ export function RightIssueCalculator() {
               <div className="space-y-6 pt-6 border-t border-secondary/10">
                 <div className="space-y-1">
                   <span className="text-[9px] text-muted-foreground font-black uppercase tracking-[0.1em] block">Modal Investasi Awal</span>
-                  <span className="text-lg font-black text-foreground block">Rp {initialInvestment.toLocaleString("id-ID")}</span>
+                  <span className="text-sm md:text-lg font-black text-foreground block break-all">Rp {initialInvestment.toLocaleString("id-ID")}</span>
                 </div>
                 <div className="space-y-1">
                   <span className="text-[9px] text-muted-foreground font-black uppercase tracking-[0.1em] block">Nilai Aset Inti (Ex)</span>
@@ -282,7 +282,7 @@ export function RightIssueCalculator() {
                <div className="p-5 rounded-2xl bg-secondary text-secondary-foreground shadow-lg shadow-secondary/20">
                   <span className="text-[10px] font-black uppercase tracking-[0.2em] block opacity-80 mb-2">Estimasi P/L Akhir</span>
                   <div className="space-y-1">
-                    <p className="text-2xl font-black leading-none">Rp {plSellHmetd.toLocaleString("id-ID", { maximumFractionDigits: 0 })}</p>
+                    <p className="text-xl md:text-2xl font-black leading-none break-all">Rp {plSellHmetd.toLocaleString("id-ID", { maximumFractionDigits: 0 })}</p>
                     <p className="text-xs font-bold opacity-90">{plSellHmetdPercent.toFixed(2)}%</p>
                   </div>
                </div>
@@ -302,7 +302,7 @@ export function RightIssueCalculator() {
             <CardContent className="p-8 space-y-8 flex-1">
               <div className="text-center py-4 bg-error/5 rounded-xl border border-error/10">
                 <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-2">Nilai Aset Terbuang</p>
-                <p className="text-4xl font-black text-error tracking-tighter">Rp {lossFromIgnore.toLocaleString("id-ID", { maximumFractionDigits: 0 })}</p>
+                <p className="text-2xl md:text-4xl font-black text-error tracking-tighter break-all">Rp {lossFromIgnore.toLocaleString("id-ID", { maximumFractionDigits: 0 })}</p>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 mt-3 rounded-full bg-error/20 text-error text-[10px] font-black uppercase tracking-tighter">
                    <AlertTriangle className="w-3 h-3" /> Dilusi Maksimal
                 </div>
@@ -311,7 +311,7 @@ export function RightIssueCalculator() {
               <div className="space-y-6 pt-6 border-t border-error/10">
                 <div className="space-y-1">
                   <span className="text-[9px] text-muted-foreground font-black uppercase tracking-[0.1em] block">Modal Investasi Awal</span>
-                  <span className="text-lg font-black text-foreground block">Rp {initialInvestment.toLocaleString("id-ID")}</span>
+                  <span className="text-sm md:text-lg font-black text-foreground block break-all">Rp {initialInvestment.toLocaleString("id-ID")}</span>
                 </div>
                 <div className="space-y-1">
                   <span className="text-[9px] text-muted-foreground font-black uppercase tracking-[0.1em] block">Nilai Portofolio (Sisa)</span>
@@ -327,7 +327,7 @@ export function RightIssueCalculator() {
                <div className="p-5 rounded-2xl bg-error text-error-foreground shadow-lg shadow-error/20">
                   <span className="text-[10px] font-black uppercase tracking-[0.2em] block opacity-80 mb-2">Estimasi P/L Akhir</span>
                   <div className="space-y-1">
-                    <p className="text-2xl font-black leading-none">Rp {plIgnore.toLocaleString("id-ID", { maximumFractionDigits: 0 })}</p>
+                    <p className="text-xl md:text-2xl font-black leading-none break-all">Rp {plIgnore.toLocaleString("id-ID", { maximumFractionDigits: 0 })}</p>
                     <p className="text-xs font-bold opacity-90">{plIgnorePercent.toFixed(2)}%</p>
                   </div>
                </div>

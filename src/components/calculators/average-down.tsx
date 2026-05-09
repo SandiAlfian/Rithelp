@@ -32,8 +32,8 @@ export function AverageDownCalculator() {
     <Card className="border-foreground/5 bg-card/40 shadow-2xl overflow-hidden">
       <CardHeader className="border-b border-foreground/5 bg-foreground/[0.02]">
         <div className="flex items-center gap-3 mb-2">
-           <div className="p-2 rounded-xl bg-primary/10 text-primary">
-              <TrendingDown className="w-5 h-5" />
+           <div className="p-2 rounded-xl bg-primary/10 text-primary shrink-0">
+              <TrendingDown className="w-5 h-5 shrink-0" />
            </div>
            <CardTitle>Average Down/Up</CardTitle>
         </div>
@@ -45,7 +45,7 @@ export function AverageDownCalculator() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-6">
             <div className="flex items-center gap-3 border-l-4 border-primary pl-4">
-              <Briefcase className="w-5 h-5 text-primary" />
+              <Briefcase className="w-5 h-5 text-primary shrink-0" />
               <h3 className="text-sm font-black uppercase tracking-widest text-foreground">Posisi Saat Ini</h3>
             </div>
             <div className="grid gap-4">
@@ -76,7 +76,7 @@ export function AverageDownCalculator() {
 
           <div className="space-y-6">
             <div className="flex items-center gap-3 border-l-4 border-secondary pl-4">
-              <TrendingDown className="w-5 h-5 text-secondary" />
+              <TrendingDown className="w-5 h-5 text-secondary shrink-0" />
               <h3 className="text-sm font-black uppercase tracking-widest text-foreground">Rencana Transaksi</h3>
             </div>
             <div className="grid gap-4">
@@ -114,9 +114,9 @@ export function AverageDownCalculator() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             <div className="space-y-1">
               <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                <Coins className="w-3 h-3 text-primary" /> Harga Rata-rata Baru
+                <Coins className="w-3 h-3 text-primary shrink-0" /> Harga Rata-rata Baru
               </p>
-              <p className="text-4xl font-black text-foreground tracking-tighter text-glow">
+              <p className="text-2xl md:text-4xl font-black text-foreground tracking-tighter text-glow break-all">
                 Rp {averagePrice.toLocaleString("id-ID", { maximumFractionDigits: 0 })}
               </p>
               <div className="flex items-center gap-1.5 mt-2">
@@ -128,9 +128,9 @@ export function AverageDownCalculator() {
             </div>
             <div className="space-y-1">
               <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                <Wallet className="w-3 h-3 text-primary" /> Modal Dibutuhkan
+                <Wallet className="w-3 h-3 text-primary shrink-0" /> Modal Dibutuhkan
               </p>
-              <p className="text-3xl font-black text-foreground/90 tracking-tighter">
+              <p className="text-xl md:text-3xl font-black text-foreground/90 tracking-tighter break-all">
                 Rp {newValue.toLocaleString("id-ID")}
               </p>
             </div>
@@ -138,11 +138,11 @@ export function AverageDownCalculator() {
             <div className="col-span-full grid grid-cols-2 gap-4 pt-6 border-t border-foreground/5">
                <div>
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Total Lot</p>
-                  <p className="text-lg font-black text-foreground/80">{totalLot.toLocaleString("id-ID")}</p>
+                  <p className="text-sm md:text-lg font-black text-foreground/80 break-all">{totalLot.toLocaleString("id-ID")}</p>
                </div>
                <div>
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Total Nilai</p>
-                  <p className="text-lg font-black text-foreground/80">Rp {totalValue.toLocaleString("id-ID")}</p>
+                  <p className="text-sm md:text-lg font-black text-foreground/80 break-all">Rp {totalValue.toLocaleString("id-ID")}</p>
                </div>
             </div>
           </div>

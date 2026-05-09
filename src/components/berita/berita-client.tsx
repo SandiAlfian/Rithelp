@@ -68,7 +68,7 @@ export function BeritaClient({
         <button
           onClick={() => handleTabChange("corp")}
           className={cn(
-            "relative flex-1 min-w-[140px] flex items-center justify-center gap-3 py-4 md:py-3 px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
+            "relative flex-1 min-w-[100px] md:min-w-[140px] flex items-center justify-center gap-2 md:gap-3 py-3 md:py-3 px-3 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
             activeTab === "corp" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
           )}
         >

@@ -4,18 +4,20 @@ import { useState } from "react"
 import { AverageDownCalculator } from "@/components/calculators/average-down"
 import { RightIssueCalculator } from "@/components/calculators/right-issue"
 import { DividendCalculator } from "@/components/calculators/dividend"
-import { ArrowDownToLine, Briefcase, Landmark } from "lucide-react"
+import { TrendingDown, Briefcase, Landmark } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
+import { useHaptic } from "@/hooks/use-haptic"
 
 const menus = [
-  { id: "average-down", label: "Average Down/Up", icon: ArrowDownToLine },
+  { id: "average-down", label: "Avg Down/Up", icon: TrendingDown },
   { id: "right-issue", label: "Right Issue", icon: Briefcase },
   { id: "dividend", label: "Dividen", icon: Landmark },
 ]
 
 export default function KalkulatorPage() {
   const [activeCalc, setActiveCalc] = useState("average-down")
+  const haptic = useHaptic()
 
   return (
     <div className="container mx-auto p-6 md:p-12 space-y-12 max-w-5xl">
@@ -48,9 +50,12 @@ export default function KalkulatorPage() {
             return (
               <button
                 key={menu.id}
-                onClick={() => setActiveCalc(menu.id)}
+                onClick={() => {
+                  setActiveCalc(menu.id)
+                  haptic("medium")
+                }}
                 className={cn(
-                  "relative flex-1 min-w-[140px] flex items-center justify-center gap-3 py-4 md:py-3 px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
+                  "relative flex-1 min-w-[100px] md:min-w-[140px] flex items-center justify-center gap-2 md:gap-3 py-3 md:py-3 px-3 md:px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 outline-none whitespace-nowrap z-10",
                   isActive ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
                 )}
               >
@@ -61,8 +66,8 @@ export default function KalkulatorPage() {
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
-                <Icon className={cn("w-4 h-4 transition-transform duration-500", isActive ? "scale-110" : "")} />
-                <span>{menu.label}</span>
+                <Icon className={cn("w-4 h-4 shrink-0 transition-transform duration-500", isActive ? "scale-110" : "")} />
+                <span className="truncate">{menu.label}</span>
               </button>
             )
           })}
